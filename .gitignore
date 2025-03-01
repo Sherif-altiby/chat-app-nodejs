@@ -1,0 +1,17 @@
+# Ignore all .env files
+**/.env
+backend/.env
+frontend/.env
+
+# Ignore all node_modules
+node_modules
+
+# Ignore all dist
+dist
+
+# Ignore all logs
+logs
+
+# Ignore all temp
+temp
+
