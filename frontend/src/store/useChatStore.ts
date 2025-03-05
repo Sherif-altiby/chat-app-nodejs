@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { ChatState, UserType } from "../types/type";
 import { AxiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
+import { useAuthStore } from "./useAuthStore";
 
 
 
@@ -50,11 +51,11 @@ export  const useChatStore  = create<ChatState>((set, get) => ({
                 }
         },
 
-        sendMessage: async (messageData: string) => {
+        sendMessage: async (text: string) => {
             const { selectedUser, messages } = get();
 
             try {
-                 const res = await AxiosInstance.post(`/messages/send/${selectedUser?._id}`, messageData);
+                 const res = await AxiosInstance.post(`/messages/send/${selectedUser?._id}`, { text });
                  set({
                     messages:[...messages, res.data.data]
                  })
@@ -63,10 +64,28 @@ export  const useChatStore  = create<ChatState>((set, get) => ({
             }
         },
 
-        setSelectedUser: (selectedUser: UserType) => set({ selectedUser }),
+        setSelectedUser: (selectedUser: UserType | null) => set({ selectedUser }),
+ 
+        subscribeToMessages: () => {
+            const { selectedUser } = get();
+            if(!selectedUser) return;
 
-        // getMessages: async () => {
+            const socket = useAuthStore.getState().socket;
 
-        // }
+
+            socket.on("newMessage", (newMessage: any) => {
+                const isMessageSentFromSelectedUser = newMessage.sender === selectedUser._id;
+                if (!isMessageSentFromSelectedUser) return;
+
+                set({
+                    messages: [...get().messages, newMessage],
+                 });
+            })
+        },
+
+        unsubscribeFromMessages: () => {
+            const socket = useAuthStore.getState().socket;
+            socket.off("newMessage");
+        },
 
 }))

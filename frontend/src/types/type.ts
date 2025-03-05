@@ -12,12 +12,15 @@ export interface AuthState {
     isLoggingIn: boolean;
     isUpdatingProfile: boolean;
     isCheckingAuth: boolean;
+    socket: any;
     checkAuth: () => Promise<void>;
     registerUser: (formData: RegisterFormData) => Promise<void>;
     loginUser: (formData: LoginFormData) => Promise<void>;
     userLogout: () => Promise<void>;
     userUpadteAvatar: ({avatar}: {avatar: File}) => Promise<void>;
-    onlineUsers: any[]
+    onlineUsers: any[],
+    connectSocket: () => void;
+    disConnectSocket: () => void;
 }
 
 export interface RegisterFormData {
@@ -43,7 +46,9 @@ export interface ChatState {
     isUsersLoading: boolean,
     isMessagesLoading: boolean,
     getUsers: () => Promise<void>
-    sendMessage: (messageData: string) => Promise<void>,
-    setSelectedUser: (selectedUser: UserType) => void,
-    getMessages: (userId: string) => Promise<void>
+    sendMessage: (text: string) => Promise<void>,
+    setSelectedUser: (selectedUser: UserType | null) => void,
+    getMessages: (userId: string) => Promise<void>,
+    subscribeToMessages: () => void;
+    unsubscribeFromMessages: () => void;
 }
