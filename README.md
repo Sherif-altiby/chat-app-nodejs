@@ -23,4 +23,4 @@ A fullstack chat app built with **Node.js, React, Tailwind CSS, and Daisy UI**.
 ### 📌 Installation
 1. **Clone the repository**
    ```sh
-   git clone https://github.com/your-username/chat-app.git
+   git clone  git@github.com:Sherif-altiby/chat-app-nodejs.git
